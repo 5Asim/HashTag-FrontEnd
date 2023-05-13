@@ -68,6 +68,7 @@ class _TrendingState extends State<Trending> {
                     color: Colors.black,fontSize: 20,fontWeight: FontWeight.w700
                 ),
               ),
+              SizedBox(height: 5,)
            
             
             ],

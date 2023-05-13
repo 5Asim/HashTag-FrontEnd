@@ -129,6 +129,61 @@ Future<List> getTotalPostTag() async {
   }
 }
 
+Future<List> getTagDetail(String title)
+async
+{
+  var token = await getToken();
+  var response = await http
+      .get(Uri.parse('$baseUrl/tag/detail/$title'),
+      headers: {
+        // 'Authorization': 'Token $token',
+            'Authorization': 'Token $token',
+  },      );
+  if (response.statusCode == 200) {
+    List<dynamic> data = jsonDecode(response.body);
+    return data;
+  } else {
+    throw Exception('Failed to load tags');
+  }
 
+}
 
+Future<void> createTag(
+  String title,
+  String content,
+  String relevant_tags,
+  bool follow_to_post
+) async {
+    var token = await getToken();
+    String url = '$baseUrl/tag/'; // Replace with your API endpoint URL
+
+    
+
+    Map<String, dynamic> requestBody = {
+      'title': title,
+      'content': content,
+      'relevant_tags': relevant_tags,
+      'follow_to_post': follow_to_post.toString(),
+    };
+
+    try {
+      final response = await http.post(Uri.parse(url), body: requestBody,headers: {
+      'Authorization':'Token ${token}',
+    });
+
+      if (response.statusCode == 201) {
+        // Tag creation successful
+        print('Tag created successfully');
+        
+        // You can perform any additional actions here
+      } else {
+        // Tag creation failed
+        print('Tag creation failed');
+        // Handle the error or show an error message to the user
+      }
+    } catch (error) {
+      print('Error creating tag: $error');
+      // Handle the error or show an error message to the user
+    }
+  }
 

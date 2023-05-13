@@ -8,6 +8,7 @@ class Post {
   String? tag_name;
   int? upvote_count;
   int? downvote_count;
+  String? status;
 
   Post({
     this.id,
@@ -17,6 +18,7 @@ class Post {
     this.tag_name,
     this.upvote_count,
     this.downvote_count,
+    this.status,
   });
 
   factory Post.fromJson(Map<String, dynamic> json) {
@@ -28,6 +30,7 @@ class Post {
       tag_name: json['tag_name'],
       upvote_count: json['upvote_count'],
       downvote_count: json['downvote_count'],
+      status: json['status'],
     );
   }
 }

@@ -173,7 +173,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\ACER\\Desktop\\project_4thsem\\HashTag\\HashTag_Backend\\HashTag\\HashTag_FrontEnd\\untitled\\android\\app\\src\\main\\res\\values\\styles.xml",
+                    "source": "C:\\org\\Frontend\\HashTag-FrontEnd\\untitled\\android\\app\\src\\main\\res\\values\\styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",
@@ -487,7 +487,7 @@
             "outputFile": "com.example.untitled.app-merged_res-11:/values-night-v8_values-night-v8.arsc.flat",
             "map": [
                 {
-                    "source": "C:\\Users\\ACER\\Desktop\\project_4thsem\\HashTag\\HashTag_Backend\\HashTag\\HashTag_FrontEnd\\untitled\\android\\app\\src\\main\\res\\values-night\\styles.xml",
+                    "source": "C:\\org\\Frontend\\HashTag-FrontEnd\\untitled\\android\\app\\src\\main\\res\\values-night\\styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",

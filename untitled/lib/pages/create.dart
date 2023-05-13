@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/api/tag_api.dart';
 
 
 
@@ -10,6 +11,10 @@ class Create extends StatefulWidget {
 }
 
 class _CreateState extends State<Create> {
+  TextEditingController titleController = TextEditingController();
+  TextEditingController contentController = TextEditingController();
+  TextEditingController relevantTagsController = TextEditingController();
+  bool followToPost = false;
   @override
   Widget build(BuildContext context) {
 
@@ -40,11 +45,12 @@ class _CreateState extends State<Create> {
             children: [
 
 
-              Text('Create Post',
+              Text('Create Tag',
                 style: TextStyle(
                     color: Colors.indigoAccent,fontSize: 20,fontWeight: FontWeight.w700
                 ),
               ),
+
 
 
             ],
@@ -55,21 +61,44 @@ class _CreateState extends State<Create> {
 
       ),
       body: ListView(
+        padding: EdgeInsets.all(12),
         children: [
-          SizedBox(
-            height: 400,
-            width: double.infinity,
-            child:TextField(
-              expands: true,
-           maxLines: null,
+          TextField(
+              controller: titleController,
               decoration: InputDecoration(
-                hintText: "What's On your Mind?"
+                labelText: 'Title',
               ),
-            )
-          ),
-          SizedBox(
-            height: 70,
-          ),
+            ),
+            SizedBox(height: 16.0),
+            TextField(
+              controller: contentController,
+              decoration: InputDecoration(
+                labelText: 'Content',
+              ),
+              maxLines: null,
+            ),
+            SizedBox(height: 16.0),
+            TextField(
+              controller: relevantTagsController,
+              decoration: InputDecoration(
+                labelText: 'Relevant Tags',
+              ),
+            ),
+            SizedBox(height: 16.0),
+            Row(
+              children: [
+                Checkbox(
+                  value: followToPost,
+                  onChanged: (value) {
+                    setState(() {
+                      followToPost = value ?? false;
+                    });
+                  },
+                ),
+                Text('Follow to Post'),
+              ],
+            ),
+            SizedBox(height: 16.0),
           Padding(
             padding: const EdgeInsets.only(left: 20, right:200),
             child: Container(
@@ -81,9 +110,19 @@ class _CreateState extends State<Create> {
                     borderRadius: BorderRadius.circular(12)
                 ),
                 onPressed: (){
+                  createTag(titleController.text, contentController.text, relevantTagsController.text, followToPost);
+                  titleController.clear();
+                  contentController.clear();
+                  relevantTagsController.clear();
+                  setState(() {
+                    setState(() {
+                      followToPost = false;
+                     });
+                  });
+                  
 
                 },
-                child: Text('Generate Tag', style: TextStyle(color: Colors.white,),
+                child: Text('Create Tag', style: TextStyle(color: Colors.white,),
                 ),
               ),
             ),

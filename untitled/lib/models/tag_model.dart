@@ -6,6 +6,12 @@ class Tag {
   String? created_by;
   DateTime? created_at;
   String? title;
+  bool? followToPost;
+  bool? followToComment;
+  bool? followToLike;
+  String? generalRules;
+  String? relevantTags;
+
 
   Tag({
     this.id,
@@ -13,6 +19,11 @@ class Tag {
     this.created_by,
     this.created_at,
     this.title,
+    this.followToPost,
+    this.followToComment,
+    this.followToLike,
+    this.generalRules,
+    this.relevantTags,
   });
 
   factory Tag.fromJson(Map<String, dynamic> json) {
@@ -22,6 +33,11 @@ class Tag {
       created_by: json['created_by'],
       created_at: DateTime.parse(json['created_at']),
       title: json['title'],
+      followToPost: json['follow_to_post'],
+      followToComment: json['follow_to_comment'],
+      followToLike: json['follow_to_like'],
+      generalRules: json['general_rules'],
+      relevantTags: json['relevant_tags'],
     );
   }
 }
