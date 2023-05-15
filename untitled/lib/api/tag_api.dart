@@ -19,7 +19,7 @@ Future<String?> getToken() async {
   return token;
 } 
 
-List<Post> self_tags=[];
+// List<Post> self_tags=[];
 Future<List<Tag>> getSelf_tag() async {
   print("Done");
   var token = await getToken();
@@ -129,7 +129,7 @@ Future<List> getTotalPostTag() async {
   }
 }
 
-Future<List> getTagDetail(String title)
+Future<List<dynamic>> getTagDetail(String title)
 async
 {
   var token = await getToken();
@@ -146,6 +146,23 @@ async
     throw Exception('Failed to load tags');
   }
 
+}
+Future<int> getTagId(String title) async {
+  var token = await getToken();
+  var response = await http.get(
+    Uri.parse('$baseUrl/tag/detail/$title'),
+    headers: {
+      'Authorization': 'Token $token',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    Map<String, dynamic> data = jsonDecode(response.body);
+    int id = data['id'];
+    return id;
+  } else {
+    throw Exception('Failed to load tag details');
+  }
 }
 
 Future<void> createTag(
@@ -186,4 +203,25 @@ Future<void> createTag(
       // Handle the error or show an error message to the user
     }
   }
+
+
+Future<String> getContent(String title) async {
+  var token = await getToken();
+  var response = await http.get(
+    Uri.parse('$baseUrl/tag/detail/$title'),
+    headers: {
+      'Authorization': 'Token $token',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    Map<String, dynamic> data = jsonDecode(response.body);
+    print(response.body);
+    String content = data['content'] ?? '';
+    print(content);
+    return content;
+  } else {
+    throw Exception('Failed to load tag details');
+  }
+}
 

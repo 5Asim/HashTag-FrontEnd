@@ -64,10 +64,10 @@ Future<List> gettagfollowers(String title) async{
 }
 
 
-Future<bool> checkIfFollowingTag(String title) async {
+Future<bool> checkIfFollowingTag(String id) async {
   var token = await getToken();
     var response = await http
-      .get(Uri.parse('$baseUrl/tag/usertagfolowingsignal/$title'),
+      .get(Uri.parse('$baseUrl/tag/usertagfolowingsignal/$id'),
       headers: {
         // 'Authorization': 'Token $token',
             'Authorization': 'Token $token',

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/api/follow_api.dart';
+import 'package:untitled/api/post_api.dart';
 import 'package:untitled/api/tag_api.dart';
 import '../api/auth/auth_api.dart';
 import '../models/post_model.dart';
 import '../models/tag_model.dart';
 import '../models/user_models.dart';
+import '../widget/create_post_teg.dart';
 import '../widget/like.dart';
 import 'home.dart';
 class PostsFromTag extends StatefulWidget {
@@ -19,8 +21,11 @@ class PostsFromTag extends StatefulWidget {
 }
 
 class _PostsFromTagState extends State<PostsFromTag> {
-  late Future<bool> status;
-  late List tag_details;
+  late Future<int> tagId;
+  late List<dynamic> tag_details;
+  late Future<String> content;
+  // late Future<bool> status1;
+
 
 
 
@@ -28,27 +33,26 @@ class _PostsFromTagState extends State<PostsFromTag> {
   void initState() {
     super.initState();
     tag_details =[];
-    status = checkIfFollowingTag(widget.tag_name);
-    getTagDetail(widget.tag_name).then((value) {
-      setState(() {
-         tag_details= value;
-      });
-    });
+    tagId = getTagId(widget.tag_name);
+    content = getContent(widget.tag_name);
+
+  
+  // // void initState() {
+  // //   List followers = [];
+  // //   User? user;
+  // //   bool status = awa;
+  //   // super.initState();
+  //   getTagDetail(widget.tag_name).then((value) 
+  //   // getSelf_tag().then((value) 
+  //   {
+  //   {
+  //     setState(() {
+  //       tag_details = value;
+ 
+  //     });
+  //   }});
+
   }
-  // void initState() {
-  //   List followers = [];
-  //   User? user;
-  //   bool status = awa;
-    // super.initState();
-    // getTagFollowers(widget.tag_name).then((value) 
-    // // getSelf_tag().then((value) 
-    // {
-    // {
-    //   setState(() {
-    //     followers = value;
-    //     // self_tags = value;
-    //   });
-    // }});
     // getUser()?.then((value) {
     //   setState(() {
     //     user = value;
@@ -74,60 +78,29 @@ class _PostsFromTagState extends State<PostsFromTag> {
         backgroundColor:Color.fromARGB(255, 202,207,250),
         elevation: 0,
         centerTitle: false,
-        actions: [
-        // FutureBuilder<bool>(
-        //     future: status,
-        //     builder: (context, snapshot) {
-        //       if (snapshot.connectionState == ConnectionState.waiting) {
-        //         return CircularProgressIndicator();
-        //       } else if (snapshot.hasError) {
-        //         return Text('Error: ${snapshot.error}');
-        //       } else {
-        //         final bool isFollowing = snapshot.data!;
-        //         return Container(
-                  
-        //           width: 100,
-        //           height: 20,
-        //           child: RawMaterialButton(
-        //           fillColor: Color.fromARGB(255, 83,84,176),
-        //           padding: EdgeInsets.symmetric(vertical: 15.0),
-        //           shape:  RoundedRectangleBorder(
-        //             borderRadius: BorderRadius.circular(12)
-        //         ),
-        //         onPressed: (){
-
-        //         },
-        //           child: Text(isFollowing ? 'Following' : 'Follow Tag')));
-        //       }
-        //     },
-        //   ),
-        ],
+        
         bottom: PreferredSize(
-          preferredSize: Size(20,50),
+          preferredSize: Size(20,70),
 
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-
+          child: Column(
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
 
-              Padding(
-                padding: const EdgeInsets.only(left:16.0),
-                child: Column(
-                  children: [
-                    Text("# " + widget.tag_name,
+                children: [
+
+
+                  Padding(
+                    padding: const EdgeInsets.only(left:16.0),
+                    child: Text("# " + widget.tag_name,
                       style: TextStyle(
                           color: Colors.black,fontSize: 20,fontWeight: FontWeight.w700
                       ),
                     ),
-                    // Text('${tag_details[index]["create*d_by_username"]} posts')
-                    // Text(widget.)
-                  ],
-                ),
-              ),
-                 FutureBuilder<bool>(
-  future: status,
+                  ),
+                     FutureBuilder<bool>(
+  future: checkIfFollowingTag(widget.tag_name),
   builder: (context, snapshot) {
     if (snapshot.connectionState == ConnectionState.waiting) {
       return CircularProgressIndicator();
@@ -136,38 +109,77 @@ class _PostsFromTagState extends State<PostsFromTag> {
     } else {
       bool isFollowing = snapshot.data!;
       return Padding(
-        padding: const EdgeInsets.only( right: 0,top: 5),
+        padding: const EdgeInsets.only( right: 0,top: 0),
         child: Container(
-          width: 130,
-          
-          child: RawMaterialButton(
-            fillColor: Color.fromARGB(255, 83, 84, 176),
-            padding: EdgeInsets.symmetric(vertical: 15.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            onPressed: () async {
-              await followTag(widget.tag_name);
-              setState(() {
-                isFollowing = !isFollowing;
-                status = checkIfFollowingTag(widget.tag_name);
-              });
-            },
-            child: Text(
-              isFollowing ? 'Following' : 'Follow Tag',
-              style: TextStyle(
-                color: Colors.white,
+              width: 120,
+              
+              child: RawMaterialButton(
+                fillColor: Color.fromARGB(255, 83, 84, 176),
+                padding: EdgeInsets.symmetric(vertical: 15.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                onPressed: () async {
+                  await followTag(widget.tag_name);
+                  setState(() {
+                    isFollowing = !isFollowing;
+                    // status1 = checkIfFollowingTag(widget.tag_name);
+                  });
+                },
+                child: Text(
+                  isFollowing ? 'Following' : 'Follow Tag',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
               ),
-            ),
-          ),
         ),
       );
     }
   },
 ),
-           SizedBox(
-         height:10,
-            )
+
+Container(
+  padding: EdgeInsets.only(right: 16),
+              width: 120,
+              
+              child: RawMaterialButton(
+                fillColor: Color.fromARGB(255, 83, 84, 176),
+                padding: EdgeInsets.symmetric(vertical: 15.0,),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                onPressed: ()  {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => PostPage(tag_id: widget.tag_name,)));
+                },
+                child: Text("Create Post",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+        ),
+              
+                ],
+              ),
+               Padding(
+                 padding: const EdgeInsets.only(left: 16,top: 8),
+                 child: FutureBuilder<String>(
+                    future: content,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        String content = snapshot.data!;
+                        return Text(
+                          '$content',
+                        );
+                      }
+                    },
+                  ),
+               ),
             ],
           ),
 
@@ -185,14 +197,6 @@ class _PostsFromTagState extends State<PostsFromTag> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Text("# " + widget.posts[index].tag_name.toString(),
-                  // style:TextStyle(
-                  //     color: Colors.black,fontSize: 24,fontWeight: FontWeight.w500
-                  //   )),
-                  // SizedBox(height: 10,),
-                  // Text(widget.posts[index].content.toString(),
-                  // style: TextStyle(color: Colors.black,fontSize: 14,
-                  //     ),),
                   
                    Text(widget.posts[index].posted_by_user.toString(), style: TextStyle(
                   color: Colors.grey,fontSize: 10,
@@ -210,14 +214,18 @@ class _PostsFromTagState extends State<PostsFromTag> {
           
             ),
             SizedBox(height: 1,),
-            Count(postdata: widget.posts[index]),
+
+
+            // Count(postdata: widget.posts[index]),
             
             SizedBox(height: 10,)
+            // ElevatedButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => ()));}, child: child)
 
                 ],
               ),
             ),
           );
+          
         },
       ),
     );

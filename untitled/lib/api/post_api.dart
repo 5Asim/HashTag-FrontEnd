@@ -19,6 +19,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 //   return token; // Return the token value (which may be null)
 // }
 
+
 Future<String?> getToken() async {
   var box = await Hive.openBox(tokenBox);
   var token = box.get("token") as String?;
@@ -27,6 +28,44 @@ Future<String?> getToken() async {
 
 List<Post> postList =[];
 List<Post> selfpostList =[];
+
+Future<void> createPost(
+  String id,
+  String content,
+  
+) async {
+    var token = await getToken();
+    String url = '$baseUrl/post/$id'; // Replace with your API endpoint URL
+
+    
+
+    Map<String, dynamic> requestBody = {
+
+      'content': content,
+    };
+
+    try {
+      final response = await http.post(Uri.parse(url), body: requestBody,headers: {
+      'Authorization':'Token ${token}',
+    });
+      print(response.body);
+      if (response.statusCode == 201 || response.statusCode==200) {
+        // Tag creation successful
+        print('Post created successfully');
+        
+        // You can perform any additional actions here
+      } else {
+        // Tag creation failed
+        print('Post creation failed');
+        // Handle the error or show an error message to the user
+      }
+    } catch (error) {
+      print('Error creating Post: $error');
+      // Handle the error or show an error message to the user
+    }
+  }
+
+
 Future<List<Post>> getPost() async {
   var token = await getToken();
   var response = await http
@@ -87,4 +126,33 @@ Future<int> getTotalSelfPost() async
   else{
     throw Exception('Failed to load count');
   }
+}
+
+
+Future<void> verifyPost(String id)async
+{
+  var token = await getToken();
+  var response = await http
+      .get(Uri.parse('$baseUrl/post/verify/$id'),
+      headers: {
+        // 'Authorization': 'Token $token',
+    'Authorization': 'Token $token',
+  },      );
+  if (response.statusCode == 200) {
+    final responseData = json.decode(response.body);
+    final verification = responseData['verification'];
+    final verificationMsg = responseData['verification_msg'];
+
+    if (verification) {
+      // Post verified
+      print(verificationMsg);
+    } else {
+      // Post unverified
+      print(verificationMsg);
+    }
+  } else {
+    // Error occurred
+    print('Error: ${response.statusCode}');
+  }
+
 }

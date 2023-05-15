@@ -65,107 +65,121 @@ class _ProfileState extends State<Profile> {
       ),
       drawer: Drawer(
         backgroundColor: drawer_color,
-        child: ListView(children: [
-          DrawerHeader(child: Text("HashTag")),
-          ListTile(
-            title: Text("Logout"),
-            onTap: () {
-              logout();
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const MyLogin()));
-            },
-          ),
-        ]),
+        child: ListView(
+          children: [
+            DrawerHeader(child: Text("HashTag")),
+            ListTile(
+              title: Text("Logout"),
+              onTap: () {
+                logout();
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const MyLogin()));
+              },
+            ),
+          ],
+        ),
       ),
-      body: Column(
-
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-                Center(
-                  
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CircleAvatar(
-                  
-                      radius: 50,
-                      backgroundImage: AssetImage("assets/avatar1.png"),
-                    ),
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: AssetImage("assets/avatar1.png"),
                   ),
                 ),
-                if (user != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0,bottom: 5),
-                    child: Center(
-                      child: Text(
-                        user!.username.toString(),
-                        style: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
+              ),
+              if (user != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 5.0, bottom: 5),
+                  child: Center(
+                    child: Text(
+                      user!.username.toString(),
+                      style: GoogleFonts.montserrat(
+                        textStyle: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
                     ),
                   ),
-                Row(
-                  
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    if (count != null)
-                      Column(
-                        children: [
-                          Text(count.toString(),style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
-                          const Text("Post",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600)),
-                        ],
-                      ),
+                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  if (count != null)
                     Column(
-                      children: const [
-                        Text('20',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600)),
-                        Text("Followers",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600)),
+                      children: [
+                        Text(
+                          count.toString(),
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                        const Text(
+                          "Post",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
                       ],
                     ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0, top: 10),
-                  child: Text(
-                    "HashTags",
-                    style: GoogleFonts.montserrat(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black,
-                    ),
+                  Column(
+                    children: const [
+                      Text(
+                        '20',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                      Text(
+                        "Followers",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                      ],
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 10,left: 12,right: 12),
-                   
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(10),
-            color: Color.fromARGB(255, 83,84,176),),
-
-                  child: TagList(self_tags: self_tags),
-                ),
+                ],
+              ),
               Padding(
-                padding: const EdgeInsets.only(left:20.0,top: 10,bottom: 10),
+                padding: const EdgeInsets.only(left: 20.0, top: 10),
                 child: Text(
-                  "Posts",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold
+                  "HashTags",
+                  style: GoogleFonts.montserrat(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
                   ),
                 ),
               ),
               Expanded(
-                // Set the width to fill the available space
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 10, left: 12, right: 12),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color.fromARGB(255, 83, 84, 176),
+                  ),
+                  child: TagList(self_tags: self_tags),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0, top: 10, bottom: 10),
+                child: Text(
+                  "Posts",
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Expanded(
                 child: SelfPostList(selfposts: selfposts),
               ),
             ],
           ),
-  );
+        ),
+      ),
+    );
+  }
 }
-}
+
+
 class TagList extends StatelessWidget {
   final List<Tag> self_tags;
 
@@ -175,60 +189,63 @@ class TagList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true,
-      key: UniqueKey(),
       itemCount: self_tags.length,
       itemBuilder: (BuildContext context, int index) {
         return Container(
-          key: ValueKey(self_tags[index].id),
-          margin: EdgeInsets.only(top: 5,left: 10,right: 20),
-          padding: EdgeInsets.only(left: 10,right: 20,top: 5,bottom: 10),
-         
-        
-        child: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 25,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.black,),
-                    borderRadius: BorderRadius.circular(15)
+          margin: EdgeInsets.only(top: 5, left: 10, right: 20),
+          padding: EdgeInsets.only(left: 10, right: 20, top: 5, bottom: 10),
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 25,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8, top: 3),
+                      child: Text(
+                        "#" + self_tags[index].title.toString(),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
                   ),
-                  
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8,top: 3),
-                    child: Text("#"+self_tags[index].title.toString(),
-                    style: TextStyle(
-                      color: Colors.black,fontSize: 15
-                    ),),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        )
+                ],
+              ),
+            ],
+          ),
         );
       },
     );
   }
 }
 
-class SelfPostList extends StatelessWidget {
+class SelfPostList extends StatefulWidget {
   final List<Post> selfposts;
   SelfPostList({Key? key, required this.selfposts}) : super(key: key);
 
   @override
+  State<SelfPostList> createState() => _SelfPostListState();
+}
+
+class _SelfPostListState extends State<SelfPostList> {
+  @override
   Widget build(BuildContext context) {
    return ListView.builder(
-      key: UniqueKey(),
-      itemCount: selfposts.length,
+    key: UniqueKey(),
+      itemCount: widget.selfposts.length,
       itemBuilder: (BuildContext context, int index) {
         return Container(
           
-          key: ValueKey(selfposts[index].id),
+          // key: ValueKey(selfposts[index].id),
           margin: EdgeInsets.only(bottom: 20),
           padding: EdgeInsets.all(10),
           
@@ -243,22 +260,42 @@ class SelfPostList extends StatelessWidget {
               
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("# "+ selfposts[index].tag_name.toString(),
-                  style:TextStyle(
-                    color: Colors.black,fontSize: 24,fontWeight: FontWeight.w500
-                  ),
+                Row(
+                  children: [
+                    Text("# "+ widget.selfposts[index].tag_name.toString(),
+                      style:TextStyle(
+                        color: Colors.black,fontSize: 24,fontWeight: FontWeight.w500
+                      ),
+                    ),
+                    if(widget.selfposts[index].status == "UNVERIFIED" || widget.selfposts[index].status == "unverified") Tooltip(message: 'Click to verify', child: TextButton(onPressed: ()async{verifyPost(widget.selfposts[index].id.toString());
+                        setState(() {
+                          widget.selfposts[index].status; 
+                        });
+                        
+                        
+                      }, child: Text("Verify Post")))
+                      else if(widget.selfposts[index].status == "VERIFIED" || widget.selfposts[index].status == "verified") Text("Verified")
+                      // Tooltip(message: 'Click to verify', child: TextButton(onPressed: ()async{verifyPost(widget.selfposts[i?ndex].id.toString());
+                        // setState(() {
+                        //   widget.selfposts[index].status; 
+                        // });
+                        
+                        
+                      
+                    
+                  ],
                 ),
-                Text(selfposts[index].posted_by_user.toString(), style: TextStyle(
+                Text(widget.selfposts[index].posted_by_user.toString(), style: TextStyle(
                   color: Colors.grey,fontSize: 10,
                 ),),
-                Text(selfposts[index].created_at.toString(),
+                Text(widget.selfposts[index].created_at.toString(),
                   style: TextStyle(
                     color: Colors.grey,fontSize: 10,
                   ),),
                 SizedBox(
                   height:10,
                 ),
-                Text(selfposts[index].content.toString(),style: TextStyle(color: Colors.black,fontSize: 14,
+                Text(widget.selfposts[index].content.toString(),style: TextStyle(color: Colors.black,fontSize: 14,
                       ),   
           
             ),

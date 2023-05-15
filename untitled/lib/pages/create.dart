@@ -99,7 +99,7 @@ class _CreateState extends State<Create> {
               ],
             ),
             SizedBox(height: 16.0),
-          Padding(
+            Padding(
             padding: const EdgeInsets.only(left: 20, right:200),
             child: Container(
               width: double.infinity,
@@ -110,18 +110,12 @@ class _CreateState extends State<Create> {
                     borderRadius: BorderRadius.circular(12)
                 ),
                 onPressed: (){
-                  createTag(titleController.text, contentController.text, relevantTagsController.text, followToPost);
-                  titleController.clear();
-                  contentController.clear();
-                  relevantTagsController.clear();
-                  setState(() {
-                    setState(() {
-                      followToPost = false;
-                     });
-                  });
-                  
-
-                },
+                 createTag(titleController.text, contentController.text, relevantTagsController.text, followToPost);
+                 titleController.clear();
+                 contentController.clear();
+                 relevantTagsController.clear();
+            
+                          },
                 child: Text('Create Tag', style: TextStyle(color: Colors.white,),
                 ),
               ),
