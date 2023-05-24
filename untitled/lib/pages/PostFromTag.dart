@@ -67,6 +67,14 @@ class _PostsFromTagState extends State<PostsFromTag> {
     //     // self_tags = value;
     //   });
     // }});
+ void refreshPosts(VoidCallback refreshCallback) async {
+  List<Post> updatedPosts = await getTag_Post(widget.tag_name);
+  setState(() {
+    widget.posts = updatedPosts;
+  });
+  refreshCallback(); // Call the provided refreshCallback function
+}
+
   @override
   
   Widget build(BuildContext context) {
@@ -74,13 +82,16 @@ class _PostsFromTagState extends State<PostsFromTag> {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 202,207,250),
       appBar: AppBar(
-        leading: BackButton(color:Color.fromARGB(255, 83, 84, 176 )),
+        leading: BackButton(color:Color.fromARGB(255, 83, 84, 176 ),onPressed: () {
+          Navigator.pop(context);
+        },),
         backgroundColor:Color.fromARGB(255, 202,207,250),
         elevation: 0,
         centerTitle: false,
         
         bottom: PreferredSize(
-          preferredSize: Size(20,70),
+          
+          preferredSize: Size(20,80),
 
           child: Column(
             children: [
@@ -150,7 +161,7 @@ Container(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 onPressed: ()  {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => PostPage(tag_id: widget.tag_name,)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => PostPage(tag_id: widget.tag_name,refreshCallback: () => refreshPosts(() {}) )));
                 },
                 child: Text("Create Post",
                   style: TextStyle(
@@ -216,7 +227,7 @@ Container(
             SizedBox(height: 1,),
 
 
-            // Count(postdata: widget.posts[index]),
+            Count(postdata: widget.posts[index]),
             
             SizedBox(height: 10,)
             // ElevatedButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => ()));}, child: child)

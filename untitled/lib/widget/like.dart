@@ -118,7 +118,7 @@ class _CountState extends State<Count> {
             }, icon: ImageIcon(AssetImage("assets/Message.png"),size: 24) 
 
     ),
-            Text('1'),
+            Text(' '),
             
           ],
         )],

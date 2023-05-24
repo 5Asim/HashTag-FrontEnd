@@ -225,3 +225,22 @@ Future<String> getContent(String title) async {
   }
 }
 
+Future<int> getTotalSelfTag() async
+{
+  var token = await getToken();
+  var response = await http
+      .get(Uri.parse('$baseUrl/tag/self/count'),
+      headers: {
+        // 'Authorization': 'Token $token',
+    'Authorization': 'Token $token',
+  },      );
+  var data = jsonDecode(response.body);
+  if(response.statusCode==200)
+  {
+    int data = jsonDecode(response.body);
+    return data;
+  }
+  else{
+    throw Exception('Failed to load count');
+  }
+}

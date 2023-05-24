@@ -23,6 +23,8 @@ class _ProfileState extends State<Profile> {
   late List<Post> selfposts = [];
   User? user;
   int? count;
+  int? tag_count;
+
 
   @override
   void initState() {
@@ -49,6 +51,11 @@ class _ProfileState extends State<Profile> {
         count = value;
       });
     });
+    getTotalSelfTag().then((value) {
+      setState(() {
+        tag_count = value;
+      });
+    });
   }
 
   @override
@@ -64,27 +71,53 @@ class _ProfileState extends State<Profile> {
         centerTitle: false,
       ),
       drawer: Drawer(
-        backgroundColor: drawer_color,
-        child: ListView(
+  backgroundColor: drawer_color,
+  child: ListView(
+    children: [
+      Container(
+        height: 80, // Adjust the height according to your preference
+        padding: EdgeInsets.symmetric(horizontal: 16), // Add horizontal padding to the header
+        // color: Colors.blue, // Set a background color for the header
+        alignment: Alignment.centerLeft, // Align the text to the left
+        child: Row(
           children: [
-            DrawerHeader(child: Text("HashTag")),
-            ListTile(
-              title: Text("Logout"),
-              onTap: () {
-                logout();
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const MyLogin()));
-              },
+            Image.asset("assets/logo.png",
+            width : 70,
+            ),
+            Text(
+              "  HashTag",
+              style: TextStyle(
+                color: dark_blue, // Set text color for the header
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
       ),
+      ListTile(
+        title: Text(
+          "Logout",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        onTap: () {
+          logout();
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const MyLogin()));
+        },
+      ),
+    ],
+  ),
+),
       body: ListView(
         scrollDirection: Axis.vertical,
         children: [Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: MediaQuery.of(context).size.height,
+              // height: MediaQuery.of(context).size.height,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -129,14 +162,15 @@ class _ProfileState extends State<Profile> {
                             ),
                           ],
                         ),
+                      if (tag_count != null)
                       Column(
-                        children: const [
+                        children: [
                           Text(
-                            '20',
+                            tag_count.toString(),
                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                           ),
                           Text(
-                            "Followers",
+                            "Tags",
                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                           ),
                           ],
@@ -272,9 +306,11 @@ class _SelfPostListState extends State<SelfPostList> {
                             message: 'Click to verify',
                             child: TextButton(
                               onPressed: () async {
-                                verifyPost(widget.selfposts[index].id.toString());
+                                await verifyPost(widget.selfposts[index].id.toString());
+
+                                
                                 setState(() {
-                                  widget.selfposts[index].status;
+                                   widget.selfposts[index].status = "VERIFIED";
                                 });
                               },
                               child: Text("Verify Post"),

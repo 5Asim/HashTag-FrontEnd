@@ -22,41 +22,36 @@ class _CreateState extends State<Create> {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 243, 244, 255),
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          color: Colors.black,
-          onPressed: (){
-            Navigator.pushNamed(context, 'home');
-          },
-        ),
+        title:Text('Create Tag',
+                style: TextStyle(
+                    color: Colors.indigoAccent,fontSize: 20,fontWeight: FontWeight.w700
+                ),
+              ), 
+              
         backgroundColor:Color.fromARGB(255, 243, 244, 255),
         elevation: 1,
         // title: Image.asset("assets/logo.png",
         // width : 100,
         // ),
         // alignment: Alignment.topLeft,
-        centerTitle: false,
+        centerTitle: true,
 
-        bottom: PreferredSize(
-          preferredSize: Size(20,20),
+        // bottom: PreferredSize(
+        //   preferredSize: Size(20,20),
 
-          child: Column(
+        //   child: Column(
 
-            children: [
+        //     children: [
 
 
-              Text('Create Tag',
-                style: TextStyle(
-                    color: Colors.indigoAccent,fontSize: 20,fontWeight: FontWeight.w700
-                ),
-              ),
+              
 
 
 
-            ],
-          ),
+        //     ],
+        //   ),
 
-        ),
+        // ),
 
 
       ),

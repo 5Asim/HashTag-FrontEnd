@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/api/post_api.dart';
+import 'package:untitled/pages/PostFromTag.dart';
+
+import '../models/post_model.dart';
 class PostPage extends StatefulWidget {
   late  String tag_id;
-  PostPage({required this.tag_id, });
+  final VoidCallback refreshCallback;
+  late  List<Post> posts;
+  late String tag_name;
+  
+  PostPage({required this.tag_id,  required this.refreshCallback, });
 
   @override
   State<PostPage> createState() => _PostPageState();
@@ -44,7 +51,11 @@ TextEditingController _contentController = TextEditingController();  @override
                 ),
                 onPressed: (){
                  createPost(widget.tag_id, _contentController.text);
-                 _contentController.clear();                },
+                 _contentController.clear();
+                 widget.refreshCallback();
+                 Navigator.pop(context);
+                
+                                 },
                 child: Text('Create Post', style: TextStyle(color: Colors.white,),
                 ),
               ),
