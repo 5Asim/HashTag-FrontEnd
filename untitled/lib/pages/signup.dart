@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:untitled/api/auth/auth_api.dart';
+import 'package:untitled/pages/start_page.dart';
 
 import '../models/user_cubit.dart';
 import '../models/user_models.dart';
@@ -131,7 +132,7 @@ class _SignUpState extends State<SignUp> {
                             User user = authRes;
                             context.read<UserCubit>().emit(user);
                             Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                            return Homepage();
+                            return StartPage();
                           },
 
                           

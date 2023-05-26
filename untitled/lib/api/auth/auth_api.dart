@@ -9,7 +9,7 @@ import "../post_api.dart";
 
 var authtoken;
 Future<dynamic> userAuth(String username, String password) async{
-  Map body = 
+  Map<String,dynamic> body = 
   {
     "username": username,
     // "email": "",
@@ -17,7 +17,10 @@ Future<dynamic> userAuth(String username, String password) async{
   };
   
   var url = Uri.parse("$baseUrl/user/auth/login/");
-  var res = await http.post(url, body: body);
+  var headers = {
+    'Content-Type': 'application/json',
+  };
+  var res = await http.post(url,headers:headers, body:json.encode(body));
   authtoken = res.body;
   print(res.body);
   print(res.statusCode);
@@ -55,10 +58,12 @@ Future<User?>? getUser()
 async {
   var token = await getToken();
   var url = Uri.parse("$baseUrl/user/auth/user/");
+ 
   var res = await http.get(
     url,
     headers: {
       'Authorization':'Token ${token}',
+      // 'Content-Type': 'application/json',
     }
   );
   if(res.statusCode == 200)
@@ -95,7 +100,8 @@ async {
   var url = Uri.parse("$baseUrl/user/auth/registration/");
   var res = await http.post(
     url,
-    body: data,
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode(data),
   );
   if(res.statusCode == 200 || res.statusCode == 201)
   {

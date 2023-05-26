@@ -12,6 +12,7 @@ import 'home.dart';
 class PostsFromTag extends StatefulWidget {
   late  List<Post> posts;
   late String tag_name;
+  // late Future<bool> isFoll?owing;
   
   
   PostsFromTag({required this.posts, required this.tag_name});
@@ -21,9 +22,16 @@ class PostsFromTag extends StatefulWidget {
 }
 
 class _PostsFromTagState extends State<PostsFromTag> {
+  // List<Tag> tag_details = [];
   late Future<int> tagId;
-  late List<dynamic> tag_details;
-  late Future<String> content;
+  late Future<bool?> isFollowing;
+  late Future<Tag> tag;
+  bool isFollowingValue = false;
+  // isFollowing = checkIfFollowingTag(widget.tag_name);
+  // late Future<Tag> tag_details;
+  // late Future<String> content;
+  // late Future<int> post_count;
+  // late Future<int> follower_count;
   // late Future<bool> status1;
 
 
@@ -32,41 +40,24 @@ class _PostsFromTagState extends State<PostsFromTag> {
   @override
   void initState() {
     super.initState();
-    tag_details =[];
+    // tag_details;
     tagId = getTagId(widget.tag_name);
-    content = getContent(widget.tag_name);
-
+    isFollowing = checkIfFollowingTag(widget.tag_name).then((value) => value);
+    tag = getTagDetail(widget.tag_name);
+    isFollowing.then((value) {
+      setState(() {
+        isFollowingValue = value ?? false;
+      });
+    });
   
-  // // void initState() {
-  // //   List followers = [];
-  // //   User? user;
-  // //   bool status = awa;
-  //   // super.initState();
-  //   getTagDetail(widget.tag_name).then((value) 
-  //   // getSelf_tag().then((value) 
-  //   {
-  //   {
-  //     setState(() {
-  //       tag_details = value;
- 
-  //     });
-  //   }});
+    // content = getContent(widget.tag_name);  
+    // post_count = getpost_count(widget.tag_name);
+    // follower_count = getfollower_count(widget.tag_name);
+    // tag_details = getTagDetail(widget.tag_name);
+   
 
   }
-    // getUser()?.then((value) {
-    //   setState(() {
-    //     user = value;
-    //   });
-    // });
-    // checkIfFollowingTag(widget.tag_name).then((value) 
-    // // getSelf_tag().then((value) 
-    // {
-    // {
-    //   setState(() {
-    //     ;
-    //     // self_tags = value;
-    //   });
-    // }});
+    
  void refreshPosts(VoidCallback refreshCallback) async {
   List<Post> updatedPosts = await getTag_Post(widget.tag_name);
   setState(() {
@@ -91,113 +82,184 @@ class _PostsFromTagState extends State<PostsFromTag> {
         
         bottom: PreferredSize(
           
-          preferredSize: Size(20,80),
+          preferredSize: Size(20,140),
 
           child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-
+            crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
 
-                  Padding(
-                    padding: const EdgeInsets.only(left:16.0),
-                    child: Text("# " + widget.tag_name,
-                      style: TextStyle(
-                          color: Colors.black,fontSize: 20,fontWeight: FontWeight.w700
+                    children: [
+
+
+                      Padding(
+                        padding: const EdgeInsets.only(left:16.0),
+                        child: Text("# " + widget.tag_name,
+                          style: TextStyle(
+                              color: Colors.black,fontSize: 20,fontWeight: FontWeight.w700
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                     FutureBuilder<bool>(
+                         FutureBuilder<bool>(
   future: checkIfFollowingTag(widget.tag_name),
   builder: (context, snapshot) {
     if (snapshot.connectionState == ConnectionState.waiting) {
-      return CircularProgressIndicator();
+          return CircularProgressIndicator();
     } else if (snapshot.hasError) {
-      return Text('Error: ${snapshot.error}');
+          return Text('Error: ${snapshot.error}');
     } else {
-      bool isFollowing = snapshot.data!;
-      return Padding(
-        padding: const EdgeInsets.only( right: 0,top: 0),
-        child: Container(
-              width: 120,
-              
-              child: RawMaterialButton(
-                fillColor: Color.fromARGB(255, 83, 84, 176),
-                padding: EdgeInsets.symmetric(vertical: 15.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                onPressed: () async {
-                  await followTag(widget.tag_name);
-                  setState(() {
-                    isFollowing = !isFollowing;
-                    // status1 = checkIfFollowingTag(widget.tag_name);
-                  });
-                },
-                child: Text(
-                  isFollowing ? 'Following' : 'Follow Tag',
-                  style: TextStyle(
-                    color: Colors.white,
+          bool isFollowing = snapshot.data!;
+          return Padding(
+            padding: const EdgeInsets.only( right: 0,top: 0),
+            child: Container(
+                  width: 120,
+                  
+                  child: RawMaterialButton(
+                    fillColor: Color.fromARGB(255, 83, 84, 176),
+                    padding: EdgeInsets.symmetric(vertical: 15.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    onPressed: () async {
+                      await followTag(widget.tag_name);
+                      setState(() {
+                        isFollowing = !isFollowing;
+                        isFollowingValue = !isFollowingValue;
+                        // refreshPosts(() {});
+                        // status1 = checkIfFollowingTag(widget.tag_name);
+                      });
+                    },
+                    child: Text(
+                      isFollowing ? 'Following' : 'Follow Tag',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-        ),
-      );
+            ),
+          );
     }
   },
 ),
 
-Container(
-  padding: EdgeInsets.only(right: 16),
-              width: 120,
-              
-              child: RawMaterialButton(
-                fillColor: Color.fromARGB(255, 83, 84, 176),
-                padding: EdgeInsets.symmetric(vertical: 15.0,),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                onPressed: ()  {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => PostPage(tag_id: widget.tag_name,refreshCallback: () => refreshPosts(() {}) )));
-                },
-                child: Text("Create Post",
-                  style: TextStyle(
-                    color: Colors.white,
+// if()
+FutureBuilder<Tag>(future: getTagDetail(widget.tag_name), builder:(context,snapshot){
+  if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      Tag tag = snapshot.data!;
+                      bool follow_to_post = tag.followToPost ?? false;
+                      // Future<bool> isfollowing = checkIfFollowingTag(widget.tag_name);
+                     
+
+                      if (follow_to_post && isFollowingValue == true || follow_to_post==false) {
+                        return Container(
+                          padding: EdgeInsets.only(right: 16),
+                          width: 120,
+                          child: RawMaterialButton(
+                            fillColor: Color.fromARGB(255, 83, 84, 176),
+                            padding: EdgeInsets.symmetric(vertical: 15.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PostPage(
+                                    tag_id: widget.tag_name,
+                                    refreshCallback: () => refreshPosts(() {}),
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Create Post',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        );
+                                            
+                      }
+                      else{
+                        return SizedBox.shrink();
+                      }
+
+}
+ }),
+
+                  
+                    ],
                   ),
-                ),
-              ),
-        ),
-              
+                   Padding(
+                     padding: const EdgeInsets.only(left: 16,top: 8,right: 5,bottom: 8),
+                     child: FutureBuilder<Tag>(
+                        future:getTagDetail(widget.tag_name),
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+    } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+    } else {
+          Tag tag = snapshot.data!;
+          String content = tag.content ?? '';
+          int postCount = tag.post_count ?? 0;
+          int followerCount = tag.follower_count ?? 0;
+
+          return Column(
+            children: [
+              Column(
+                                  children: [
+                                    SizedBox(height: 5,),
+                                    Text('$content',style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400, )),
+                                    SizedBox(height: 5,),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Text("Post",style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                                            Text('$postCount',style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                                          ],
+                                        ),
+                                        // SizedBox(height: 8,),
+                                        Column(
+                                          children: [
+                                            Text("Followers",
+                                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                                            Text('$followerCount',
+                                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+
+                                    
+                                  ],
+                                  
+                                ),
+            ],
+          );
+                          }
+                        },
+                      ),
+                   ),
+
                 ],
               ),
-               Padding(
-                 padding: const EdgeInsets.only(left: 16,top: 8),
-                 child: FutureBuilder<String>(
-                    future: content,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      } else {
-                        String content = snapshot.data!;
-                        return Text(
-                          '$content',
-                        );
-                      }
-                    },
-                  ),
-               ),
-            ],
-          ),
-
-        ),
 
       ),
-      body: ListView.builder(
+      ),
+      body:
+        
+    
+      ListView.builder(
         itemCount: widget.posts.length,
         itemBuilder: (context, index) {
           return Card(
@@ -219,7 +281,7 @@ Container(
                 SizedBox(
                   height:10,
                 ),
-                Text(widget.posts[index].content.toString(),style: TextStyle(color: Colors.black,fontSize: 14,
+                Text(widget.posts[index].content.toString(),style: TextStyle(color: Colors.black,fontSize: 16,letterSpacing: 0.5
                       ), 
                       
           
@@ -239,7 +301,67 @@ Container(
           
         },
       ),
+        
     );
   }
 }
 
+// class PostTaglist extends StatefulWidget {
+//   final List<Post> posts;
+//   const PostTaglist({super.key, required this.posts});
+
+//   @override
+//   State<PostTaglist> createState() => _PostTaglistState();
+// }
+
+// class _PostTaglistState extends State<PostTaglist> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//       List.generate(
+//       widget.posts.length,
+//       (index) {
+//         return Container(
+//           margin: EdgeInsets.only(top: 20),
+          
+//           child: Padding(
+//             padding: const EdgeInsets.only(left: 16, right: 16,top: 16),
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+                
+//                  Text(widget.posts[index].posted_by_user.toString(), style: TextStyle(
+//                 color: Colors.grey,fontSize: 10,
+//               ),),
+//               Text(widget.posts[index].created_at.toString(),
+//                 style: TextStyle(
+//                   color: Colors.grey,fontSize: 10,
+//                 ),),
+//               SizedBox(
+//                 height:10,
+//               ),
+//               Text(widget.posts[index].content.toString(),style: TextStyle(color: Colors.black,fontSize: 14,
+//                     ), 
+                    
+        
+//           ),
+//           SizedBox(height: 1,),
+
+
+//           Count(postdata: widget.posts[index]),
+          
+//           SizedBox(height: 10,)
+//           // ElevatedButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => ()));}, child: child)
+
+//               ],
+//             ),
+//           ),
+//         );
+        
+//       },
+//     )
+//     ]
+//     );
+//   }
+// }

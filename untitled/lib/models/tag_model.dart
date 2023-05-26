@@ -11,6 +11,8 @@ class Tag {
   bool? followToLike;
   String? generalRules;
   String? relevantTags;
+  int? post_count;
+  int? follower_count;
 
 
   Tag({
@@ -24,13 +26,15 @@ class Tag {
     this.followToLike,
     this.generalRules,
     this.relevantTags,
+    this.post_count,
+    this.follower_count,
   });
 
   factory Tag.fromJson(Map<String, dynamic> json) {
     return Tag(
       id: json['id'],
       content: json['content'],
-      created_by: json['created_by'],
+      created_by: json['created_by_username'],
       created_at: DateTime.parse(json['created_at']),
       title: json['title'],
       followToPost: json['follow_to_post'],
@@ -38,6 +42,8 @@ class Tag {
       followToLike: json['follow_to_like'],
       generalRules: json['general_rules'],
       relevantTags: json['relevant_tags'],
+      post_count: json['post_count'],
+      follower_count: json['follower_count']
     );
   }
 }

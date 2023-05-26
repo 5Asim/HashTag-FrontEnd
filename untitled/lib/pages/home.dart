@@ -155,7 +155,7 @@ class _PostsListState extends State<PostsList> {
                 SizedBox(
                   height:15,
                 ),
-                Text(widget.posts[index].content.toString(),style: TextStyle(color: Colors.black,fontSize: 14,
+                Text(widget.posts[index].content.toString(),style: TextStyle(color: Colors.black,fontSize: 16,letterSpacing: 0.5
                       ), 
                       
           

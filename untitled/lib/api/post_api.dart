@@ -9,6 +9,8 @@ import 'package:untitled/models/post_model.dart';
 import 'package:untitled/models/user_models.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../models/tag_model.dart';
+
 // Future<String?> getToken() async {
 //   await Hive.openBox('tokenBox'); // Open the Hive box
 
@@ -129,30 +131,52 @@ Future<int> getTotalSelfPost() async
 }
 
 
-Future<void> verifyPost(String id)async
-{
+Future<bool> verifyPost(String id) async {
   var token = await getToken();
-  var response = await http
-      .get(Uri.parse('$baseUrl/post/verify/$id'),
-      headers: {
-        // 'Authorization': 'Token $token',
-    'Authorization': 'Token $token',
-  },      );
+  var response = await http.get(
+    Uri.parse('$baseUrl/post/verify/$id'),
+    headers: {
+      'Authorization': 'Token $token',
+    },
+  );
+
   if (response.statusCode == 200) {
     final responseData = json.decode(response.body);
     final verification = responseData['verification'];
-    final verificationMsg = responseData['verification_msg'];
 
     if (verification) {
       // Post verified
-      print(verificationMsg);
+      print(verification);
+      return true;
     } else {
       // Post unverified
-      print(verificationMsg);
+      print(verification);
+      return false;
     }
   } else {
     // Error occurred
     print('Error: ${response.statusCode}');
+    throw Exception('Error occurred while verifying post');
   }
+}
 
+
+Future<List<Tag>> getRecomendedPost() async {
+  var token = await getToken();
+  var response = await http
+      .get(Uri.parse('$baseUrl/tag/recommend/'),
+      headers: {
+        // 'Authorization': 'Token $token',
+    'Authorization': 'Token $token',
+  },      );
+  var data = jsonDecode(response.body.toString());
+  // print(data);
+  if (response.statusCode == 200) {
+    List<dynamic> data = jsonDecode(response.body);
+    print(response.body);
+    List<Tag> posts = data.map((postJson) => Tag.fromJson(postJson)).toList();
+    return posts;
+  } else {
+    throw Exception('Failed to load tags');
+  }
 }

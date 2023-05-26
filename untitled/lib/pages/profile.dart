@@ -126,7 +126,7 @@ class _ProfileState extends State<Profile> {
                       padding: const EdgeInsets.all(8.0),
                       child: CircleAvatar(
                         radius: 50,
-                        backgroundImage: AssetImage("assets/avatar1.png"),
+                        backgroundImage: AssetImage("assets/animal_pp.png",),
                       ),
                     ),
                   ),
@@ -306,18 +306,20 @@ class _SelfPostListState extends State<SelfPostList> {
                             message: 'Click to verify',
                             child: TextButton(
                               onPressed: () async {
-                                await verifyPost(widget.selfposts[index].id.toString());
+                                bool state = await verifyPost(widget.selfposts[index].id.toString());
+
 
                                 
                                 setState(() {
-                                   widget.selfposts[index].status = "VERIFIED";
+                                   if(state)widget.selfposts[index].status = "VERIFIED";
+                                   else if(state==false)widget.selfposts[index].status = "UNVERIFIED" ;
                                 });
                               },
-                              child: Text("Verify Post"),
+                              child: Text("    Verify Post"),
                             ),
                           )
                         else if (widget.selfposts[index].status == "VERIFIED" || widget.selfposts[index].status == "verified")
-                          Text("Verified"),
+                          Text("    Verified"),
                       ],
                     ),
                     Text(
@@ -341,10 +343,12 @@ class _SelfPostListState extends State<SelfPostList> {
                       widget.selfposts[index].content.toString(),
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 14,
+                        fontSize: 16,
+                        letterSpacing: 0.5
                       ),
                     ),
                     SizedBox(height: 10),
+                    
                   ],
                 ),
               ),
