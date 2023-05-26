@@ -82,7 +82,7 @@ class _PostsFromTagState extends State<PostsFromTag> {
         
         bottom: PreferredSize(
           
-          preferredSize: Size(20,140),
+          preferredSize: Size(30,200),
 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -152,6 +152,7 @@ async {
   var res = await http.get(
     url,
     headers: {
+      'Content-Type': 'application/json',
       'Authorization':'Token ${token}',
     }
   );

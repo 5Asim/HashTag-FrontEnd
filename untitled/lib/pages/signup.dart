@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:untitled/api/auth/auth_api.dart';
+import 'package:untitled/pages/login.dart';
 import 'package:untitled/pages/start_page.dart';
 
 import '../models/user_cubit.dart';
@@ -180,8 +181,11 @@ class _SignUpState extends State<SignUp> {
                           child:TextButton(
 
                             onPressed: (){
-                              Navigator.pushNamed(context, 'login');
-                            },
+                               Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                            return MyLogin();
+                               }
+                          ));
+                          },
                             child: Text('Login here', style: TextStyle(
                                 color: Colors.black),
                             ),

@@ -45,9 +45,9 @@ class _TrendingState extends State<Trending> {
 
         centerTitle: false,
         actions: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.search), color: Colors.black),
+          // IconButton(onPressed: (){}, icon: Icon(Icons.search), color: Colors.black),
 
-          IconButton(onPressed: (){}, icon: Icon(Icons.notifications_active_outlined),color: Colors.indigoAccent),
+          // IconButton(onPressed: (){}, icon: Icon(Icons.notifications_active_outlined),color: Colors.indigoAccent),
           // Row(
           // children: [
           //   Text('Recommended For You')
